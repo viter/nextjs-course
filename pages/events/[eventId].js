@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import { useRouter } from 'next/router';
 
 import { getEventById } from '../../dummy-data';
 import EventSummary from '../../components/event-detail/event-summary';
@@ -7,11 +6,8 @@ import EventLogistics from '../../components/event-detail/event-logistics';
 import EventContent from '../../components/event-detail/event-content';
 import ErrorAlert from '../../components/ui/error-alert';
 
-function EventDetailPage() {
-  const router = useRouter();
-
-  const eventId = router.query.eventId;
-  const event = getEventById(eventId);
+function EventDetailPage(props) {
+  const event = props.event;
 
   if (!event) {
     return (
@@ -38,3 +34,11 @@ function EventDetailPage() {
 }
 
 export default EventDetailPage;
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      event: await getEventById(context.params.eventId),
+    },
+  };
+}
