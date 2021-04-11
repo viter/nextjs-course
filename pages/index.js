@@ -1,29 +1,32 @@
-import fs from 'fs/promises';
-import path from 'path';
-import Link from 'next/link';
+import { Fragment } from 'react';
+import Head from 'next/head';
+
+import FeaturedPosts from '../components/home-page/featured-posts';
+import Hero from '../components/home-page/hero';
+import { getFeaturedPosts } from '../lib/posts-util';
 
 function HomePage(props) {
-  const { products } = props;
   return (
-    <ul>
-      {products.map((product) => {
-        return (
-          <li key={product.id}>
-            <Link href={`/${product.id}`}>{product.title}</Link>
-          </li>
-        );
-      })}
-    </ul>
+    <Fragment>
+      <Head>
+        <title>Max' Blog</title>
+        <meta
+          name='description'
+          content='I post about programming and web development.'
+        />
+      </Head>
+      <Hero />
+      <FeaturedPosts posts={props.posts} />
+    </Fragment>
   );
 }
 
-export async function getStaticProps() {
-  const filePath = path.join(process.cwd(), 'data', 'dummy-backend.json');
-  const jsonData = await fs.readFile(filePath);
-  const data = JSON.parse(jsonData);
+export function getStaticProps() {
+  const featuredPosts = getFeaturedPosts();
+
   return {
     props: {
-      products: data.products,
+      posts: featuredPosts,
     },
   };
 }
