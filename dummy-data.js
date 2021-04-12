@@ -13,12 +13,7 @@ function transformEvents(events) {
   for (const key in events) {
     transformedEvents.push({
       id: key,
-      title: events[key].title,
-      description: events[key].description,
-      location: events[key].location,
-      date: events[key].date,
-      image: events[key].image,
-      isFeatured: events[key].isFeatured,
+      ...events[key],
     });
   }
   return transformedEvents;
@@ -29,12 +24,9 @@ export async function getFeaturedEvents() {
   return events.filter((event) => event.isFeatured);
 }
 
-export function getFilteredEvents(dateFilter) {
-  const { data, error } = useSWR(
-    'https://nextjs-course-b8418-default-rtdb.firebaseio.com/events.json'
-  );
+export async function getFilteredEvents(dateFilter) {
   const { year, month } = dateFilter;
-  const events = transformEvents(data);
+  const events = await getAllEvents();
   let filteredEvents = events.filter((event) => {
     const eventDate = new Date(event.date);
     return (
