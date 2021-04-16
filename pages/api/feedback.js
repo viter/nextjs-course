@@ -1,10 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 
+function buildFeedbackPath() {
+  return path.join(process.cwd(), 'data', 'feedback.json');
+}
+
 function handler(req, res) {
   if (req.method === 'POST') {
     const email = req.body.email;
-    const feedbackText = req.body.feedback;
+    const feedbackText = req.body.text;
 
     const newFeedback = {
       id: new Date().toISOString(),
