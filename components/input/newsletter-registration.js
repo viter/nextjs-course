@@ -1,4 +1,5 @@
 import classes from './newsletter-registration.module.css';
+import { useRef } from 'react';
 
 function NewsletterRegistration() {
   function registrationHandler(event) {
